@@ -8,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Bitvis VIP HVVC-to-VVC Bridge &mdash; UVVM  documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="_static/custom.css?v=8abdc7a9" />
 
   
@@ -55,6 +55,7 @@
 <li class="toctree-l1"><a class="reference internal" href="optimized_rand.html">Optimized Randomization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="uvvm_assertions.html">UVVM Assertions (BETA)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vvc_framework.html">VVC Framework</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vip_apb.html">External VIP APB</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vip_avalon_mm.html">Bitvis VIP Avalon-MM</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vip_avalon_st.html">Bitvis VIP Avalon-ST</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vip_axi.html">Bitvis VIP AXI4</a></li>
@@ -258,7 +259,7 @@ interface name.</p></li>
 instantiation of the HVVC, in this example the ones named GC_* on the right hand side of the generic map, are passed on through
 the HVVC from the test harness/testbench. Additional interfaces can be added by using the generate statement for each architecture.</p>
 <div class="highlight-VHDL notranslate"><div class="highlight"><pre><span></span><span class="n">gen_hvvc_bridge</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">GC_PHY_INTERFACE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GMII</span><span class="w"> </span><span class="k">generate</span>
-<span class="w">  </span><span class="n">i_hvvc_to_vvc_bridge</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">entity</span><span class="w"> </span><span class="nc">bitvis_vip_hvvc_to_vvc_bridge</span><span class="p">.</span><span class="n">hvvc_to_vvc_bridge</span><span class="p">(</span><span class="n">GMII</span><span class="p">)</span>
+<span class="w">  </span><span class="n">i_hvvc_to_vvc_bridge</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">entity</span><span class="w"> </span><span class="nc">bitvis_vip_hvvc_to_vvc_bridge</span><span class="p">.</span><span class="n">hvvc_to_vvc_bridge</span><span class="p">(</span><span class="n">gmii</span><span class="p">)</span>
 <span class="w">    </span><span class="k">generic</span><span class="w"> </span><span class="k">map</span><span class="p">(</span>
 <span class="w">      </span><span class="n">GC_INSTANCE_IDX</span><span class="w">        </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">GC_PHY_VVC_INSTANCE_IDX</span><span class="p">,</span>
 <span class="w">      </span><span class="n">GC_DUT_IF_FIELD_CONFIG</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">GC_DUT_IF_FIELD_CONFIG</span><span class="p">,</span>

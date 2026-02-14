@@ -8,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Bitvis VIP I2C &mdash; UVVM  documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="_static/custom.css?v=8abdc7a9" />
 
   
@@ -55,6 +55,7 @@
 <li class="toctree-l1"><a class="reference internal" href="optimized_rand.html">Optimized Randomization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="uvvm_assertions.html">UVVM Assertions (BETA)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vvc_framework.html">VVC Framework</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vip_apb.html">External VIP APB</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vip_avalon_mm.html">Bitvis VIP Avalon-MM</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vip_avalon_st.html">Bitvis VIP Avalon-ST</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vip_axi.html">Bitvis VIP AXI4</a></li>
@@ -338,12 +339,12 @@ the BFM</p></td>
 <tr class="row-odd"><td><p>id_for_bfm_wait</p></td>
 <td><p><a class="reference internal" href="utility_library.html#message-ids"><span class="std std-ref">t_msg_id</span></a></p></td>
 <td><p>ID_BFM_WAIT</p></td>
-<td><p>Message ID used for logging waits in the BFM</p></td>
+<td><p>DEPRECATED</p></td>
 </tr>
 <tr class="row-even"><td><p>id_for_bfm_poll</p></td>
 <td><p><a class="reference internal" href="utility_library.html#message-ids"><span class="std std-ref">t_msg_id</span></a></p></td>
 <td><p>ID_BFM_POLL</p></td>
-<td><p>Message ID used for logging polling in the BFM</p></td>
+<td><p>DEPRECATED</p></td>
 </tr>
 </tbody>
 </table>
@@ -2079,18 +2080,18 @@ SUCCEEDED during a transaction</p></td>
 <h3>Scoreboard<a class="headerlink" href="#scoreboard" title="Link to this heading"></a></h3>
 <p>This VVC has built in Scoreboard functionality where data can be routed by setting the TO_SB parameter in supported method calls,
 i.e. i2c_master_receive(). Note that the data is only stored in the scoreboard and not accessible with the fetch_result() method
-when the TO_SB parameter is applied. The I2C scoreboard is accessible from the testbench as a shared variable <code class="docutils literal notranslate"><span class="pre">I2C_VVC_SB</span></code>,
+when the TO_SB parameter is applied. The I2C scoreboard is accessible from the testbench as a shared variable <code class="docutils literal notranslate"><span class="pre">i2c_vvc_sb</span></code>,
 located in the vvc_methods_pkg.vhd, e.g.</p>
-<div class="highlight-VHDL notranslate"><div class="highlight"><pre><span></span><span class="n">I2C_VVC_SB</span><span class="p">.</span><span class="n">add_expected</span><span class="p">(</span><span class="n">C_I2C_VVC_IDX</span><span class="p">,</span><span class="w"> </span><span class="n">pad_i2c_sb</span><span class="p">(</span><span class="n">v_expected</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Adding expected&quot;</span><span class="p">);</span>
+<div class="highlight-VHDL notranslate"><div class="highlight"><pre><span></span><span class="n">i2c_vvc_sb</span><span class="p">.</span><span class="n">add_expected</span><span class="p">(</span><span class="n">C_I2C_VVC_IDX</span><span class="p">,</span><span class="w"> </span><span class="n">pad_i2c_sb</span><span class="p">(</span><span class="n">v_expected</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Adding expected&quot;</span><span class="p">);</span>
 </pre></div>
 </div>
 <p>The I2C scoreboard is per default a 64 bits wide standard logic vector. When sending expected data to the scoreboard, where the
 data width is smaller than the default scoreboard width, we recommend zero-padding the data with the pad_i2c_sb() function, e.g.</p>
-<div class="highlight-VHDL notranslate"><div class="highlight"><pre><span></span><span class="n">I2C_VVC_SB</span><span class="p">.</span><span class="n">add_expected</span><span class="p">(</span><span class="o">&lt;</span><span class="n">I2C</span><span class="w"> </span><span class="n">VVC</span><span class="w"> </span><span class="n">instance</span><span class="w"> </span><span class="n">number</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="n">pad_i2c_sb</span><span class="p">(</span><span class="o">&lt;</span><span class="n">exp</span><span class="w"> </span><span class="n">data</span><span class="o">&gt;</span><span class="p">));</span>
+<div class="highlight-VHDL notranslate"><div class="highlight"><pre><span></span><span class="n">i2c_vvc_sb</span><span class="p">.</span><span class="n">add_expected</span><span class="p">(</span><span class="o">&lt;</span><span class="n">I2C</span><span class="w"> </span><span class="n">VVC</span><span class="w"> </span><span class="n">instance</span><span class="w"> </span><span class="n">number</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="n">pad_i2c_sb</span><span class="p">(</span><span class="o">&lt;</span><span class="n">exp</span><span class="w"> </span><span class="n">data</span><span class="o">&gt;</span><span class="p">));</span>
 </pre></div>
 </div>
 <p>See the <a class="reference internal" href="vip_scoreboard.html#vip-scoreboard"><span class="std std-ref">Bitvis VIP Scoreboard</span></a> for a complete list of available commands and additional information. All of the listed Generic
-Scoreboard commands are available for the I2C VVC scoreboard using the <code class="docutils literal notranslate"><span class="pre">I2C_VVC_SB</span></code>.</p>
+Scoreboard commands are available for the I2C VVC scoreboard using the <code class="docutils literal notranslate"><span class="pre">i2c_vvc_sb</span></code>.</p>
 </section>
 <section id="unwanted-activity-detection">
 <h3>Unwanted Activity Detection<a class="headerlink" href="#unwanted-activity-detection" title="Link to this heading"></a></h3>

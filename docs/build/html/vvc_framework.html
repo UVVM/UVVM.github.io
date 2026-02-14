@@ -8,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>VVC Framework &mdash; UVVM  documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="_static/custom.css?v=8abdc7a9" />
 
   
@@ -235,6 +235,7 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="vip_apb.html">External VIP APB</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vip_avalon_mm.html">Bitvis VIP Avalon-MM</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vip_avalon_st.html">Bitvis VIP Avalon-ST</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vip_axi.html">Bitvis VIP AXI4</a></li>
@@ -2089,8 +2090,8 @@ scoreboard element and where a dedicated process monitors the VVC transaction in
 scoreboard.</p></li>
 <li><p>Transaction info can be used in a DUT Model process that monitors and decodes the actual transaction info data in the test
 harness. The DUT Model will use the decoded transaction info and add expected data to the VVC scoreboard on the DUT
-receiving side, e.g. to the SBI_VVC_SB while a SBI VVC is responsible for performing the DUT read access and check received
-data with SBI_VVC_SB. See <a class="reference internal" href="#vvc-framework-transaction-info-purpose"><span class="std std-ref">Transaction Info Purpose</span></a>, example C, for how a
+receiving side, e.g. to the sbi_vvc_sb while a SBI VVC is responsible for performing the DUT read access and check received
+data with sbi_vvc_sb. See <a class="reference internal" href="#vvc-framework-transaction-info-purpose"><span class="std std-ref">Transaction Info Purpose</span></a>, example C, for how a
 DUT Model will appear in the test harness.</p></li>
 </ol>
 </div></blockquote>
@@ -2128,14 +2129,14 @@ Figure 6 uses aliasing to simplify and improve code readability, while Figure 7 
 <span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="n">sbi_transaction_trigger</span><span class="na">&#39;event</span><span class="w"> </span><span class="k">then</span>
 <span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="n">sbi_transaction_info</span><span class="p">.</span><span class="n">operation</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">READ</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">sbi_transaction_info</span><span class="p">.</span><span class="n">transaction_status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">COMPLETED</span><span class="w"> </span><span class="k">then</span>
 <span class="w">        </span><span class="n">v_sb_element</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">sbi_transaction_info</span><span class="p">.</span><span class="n">data</span><span class="p">(</span><span class="n">C_DATA_WIDTH</span><span class="o">-</span><span class="mi">1</span><span class="w"> </span><span class="k">downto</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
-<span class="w">        </span><span class="n">SBI_VVC_SB</span><span class="p">.</span><span class="n">check_received</span><span class="p">(</span><span class="n">C_SBI_VVC_1</span><span class="p">,</span><span class="w"> </span><span class="n">v_sb_element</span><span class="p">);</span>
+<span class="w">        </span><span class="n">sbi_vvc_sb</span><span class="p">.</span><span class="n">check_received</span><span class="p">(</span><span class="n">C_SBI_VVC_1</span><span class="p">,</span><span class="w"> </span><span class="n">v_sb_element</span><span class="p">);</span>
 <span class="w">      </span><span class="k">end</span><span class="w"> </span><span class="k">if</span><span class="p">;</span>
 <span class="w">    </span><span class="k">end</span><span class="w"> </span><span class="k">if</span><span class="p">;</span>
 
 <span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="n">uart_rx_transaction_trigger</span><span class="na">&#39;event</span><span class="w"> </span><span class="k">then</span>
 <span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="n">uart_rx_info</span><span class="p">.</span><span class="n">operation</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">RECEIVE</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">uart_rx_info</span><span class="p">.</span><span class="n">transaction_status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">COMPLETED</span><span class="w"> </span><span class="k">then</span>
 <span class="w">        </span><span class="n">v_sb_element</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">uart_rx_info</span><span class="p">.</span><span class="n">data</span><span class="p">(</span><span class="n">C_DATA_WIDTH</span><span class="o">-</span><span class="mi">1</span><span class="w"> </span><span class="k">downto</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
-<span class="w">        </span><span class="n">UART_VVC_SB</span><span class="p">.</span><span class="n">check_received</span><span class="p">(</span><span class="n">C_UART_VVC_1</span><span class="p">,</span><span class="w"> </span><span class="n">v_sb_element</span><span class="p">);</span>
+<span class="w">        </span><span class="n">uart_vvc_sb</span><span class="p">.</span><span class="n">check_received</span><span class="p">(</span><span class="n">C_UART_VVC_1</span><span class="p">,</span><span class="w"> </span><span class="n">v_sb_element</span><span class="p">);</span>
 <span class="w">      </span><span class="k">end</span><span class="w"> </span><span class="k">if</span><span class="p">;</span>
 <span class="w">    </span><span class="k">end</span><span class="w"> </span><span class="k">if</span><span class="p">;</span>
 
@@ -2158,13 +2159,13 @@ these scoreboard approaches are already performed by the VVCs.</p>
 
 <span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="n">global_sbi_vvc_transaction_trigger</span><span class="p">(</span><span class="n">C_SBI_VVC_1</span><span class="p">)</span><span class="na">&#39;event</span><span class="w"> </span><span class="k">then</span>
 <span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="n">shared_sbi_vvc_transaction_info</span><span class="p">(</span><span class="n">C_SBI_VVC_1</span><span class="p">).</span><span class="n">bt</span><span class="p">.</span><span class="n">operation</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">WRITE</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">shared_sbi_vvc_transaction_info</span><span class="p">(</span><span class="n">C_SBI_VVC_1</span><span class="p">).</span><span class="n">bt</span><span class="p">.</span><span class="n">transaction_status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">IN_PROGRESS</span><span class="w"> </span><span class="k">then</span>
-<span class="w">        </span><span class="n">UART_VVC_SB</span><span class="p">.</span><span class="n">add_expected</span><span class="p">(</span><span class="n">shared_sbi_vvc_transaction_info</span><span class="p">(</span><span class="n">C_SBI_VVC_1</span><span class="p">).</span><span class="n">bt</span><span class="p">.</span><span class="n">data</span><span class="p">(</span><span class="n">C_DATA_WIDTH</span><span class="o">-</span><span class="mi">1</span><span class="w"> </span><span class="k">downto</span><span class="w"> </span><span class="mi">0</span><span class="p">));</span>
+<span class="w">        </span><span class="n">uart_vvc_sb</span><span class="p">.</span><span class="n">add_expected</span><span class="p">(</span><span class="n">shared_sbi_vvc_transaction_info</span><span class="p">(</span><span class="n">C_SBI_VVC_1</span><span class="p">).</span><span class="n">bt</span><span class="p">.</span><span class="n">data</span><span class="p">(</span><span class="n">C_DATA_WIDTH</span><span class="o">-</span><span class="mi">1</span><span class="w"> </span><span class="k">downto</span><span class="w"> </span><span class="mi">0</span><span class="p">));</span>
 <span class="w">      </span><span class="k">end</span><span class="w"> </span><span class="k">if</span><span class="p">;</span>
 <span class="w">    </span><span class="k">end</span><span class="w"> </span><span class="k">if</span><span class="p">;</span>
 
 <span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="n">global_uart_vvc_transaction_trigger</span><span class="p">(</span><span class="n">TX</span><span class="p">,</span><span class="w"> </span><span class="n">C_UART_VVC_1</span><span class="p">)</span><span class="na">&#39;event</span><span class="w"> </span><span class="k">then</span>
 <span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="n">shared_uart_vvc_transaction_info</span><span class="p">(</span><span class="n">TX</span><span class="p">,</span><span class="w"> </span><span class="n">C_UART_VVC_1</span><span class="p">).</span><span class="n">bt</span><span class="p">.</span><span class="n">operation</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TRANSMIT</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">shared_uart_vvc_transaction_info</span><span class="p">(</span><span class="n">TX</span><span class="p">,</span><span class="w"> </span><span class="n">C_UART_VVC_1</span><span class="p">).</span><span class="n">bt</span><span class="p">.</span><span class="n">transaction_status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">IN_PROGRESS</span><span class="w"> </span><span class="k">then</span>
-<span class="w">        </span><span class="n">SBI_VVC_SB</span><span class="p">.</span><span class="n">add_expected</span><span class="p">(</span><span class="n">shared_uart_vvc_transaction</span><span class="p">(</span><span class="n">TX</span><span class="p">,</span><span class="w"> </span><span class="n">C_UART_VVC_1</span><span class="p">).</span><span class="n">bt</span><span class="p">.</span><span class="n">data</span><span class="p">(</span><span class="n">C_DATA_WIDTH</span><span class="o">-</span><span class="mi">1</span><span class="w"> </span><span class="k">downto</span><span class="w"> </span><span class="mi">0</span><span class="p">));</span>
+<span class="w">        </span><span class="n">sbi_vvc_sb</span><span class="p">.</span><span class="n">add_expected</span><span class="p">(</span><span class="n">shared_uart_vvc_transaction</span><span class="p">(</span><span class="n">TX</span><span class="p">,</span><span class="w"> </span><span class="n">C_UART_VVC_1</span><span class="p">).</span><span class="n">bt</span><span class="p">.</span><span class="n">data</span><span class="p">(</span><span class="n">C_DATA_WIDTH</span><span class="o">-</span><span class="mi">1</span><span class="w"> </span><span class="k">downto</span><span class="w"> </span><span class="mi">0</span><span class="p">));</span>
 <span class="w">      </span><span class="k">end</span><span class="w"> </span><span class="k">if</span><span class="p">;</span>
 <span class="w">    </span><span class="k">end</span><span class="w"> </span><span class="k">if</span><span class="p">;</span>
 
@@ -2206,7 +2207,7 @@ record element.</p>
 <span class="w">            </span><span class="n">to_string_element</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">avalon_st_element_to_string</span><span class="p">);</span>
 <span class="k">use</span><span class="w"> </span><span class="nn">avalon_st_sb_pkg.</span><span class="k">all</span><span class="p">;</span>
 
-<span class="k">shared</span><span class="w"> </span><span class="k">variable</span><span class="w"> </span><span class="n">AVALON_ST_VVC_SB</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">avalon_st_sb_pkg</span><span class="p">.</span><span class="n">t_generic_sb</span><span class="p">;</span>
+<span class="k">shared</span><span class="w"> </span><span class="k">variable</span><span class="w"> </span><span class="n">avalon_st_vvc_sb</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">avalon_st_sb_pkg</span><span class="p">.</span><span class="n">t_generic_sb</span><span class="p">;</span>
 <span class="p">...</span>
 <span class="n">p_vvc_sb_support</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">process</span>
 <span class="w">  </span><span class="c1">-- transaction info handles</span>
@@ -2225,7 +2226,7 @@ record element.</p>
 <span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="n">avalon_st_transaction_info</span><span class="p">.</span><span class="n">operation</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">RECEIVE</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">avalon_st_transaction_info</span><span class="p">.</span><span class="n">transaction_status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">COMPLETED</span><span class="w"> </span><span class="k">then</span>
 <span class="w">        </span><span class="n">v_sb_element</span><span class="p">.</span><span class="n">channel_value</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">avalon_st_transaction_info</span><span class="p">.</span><span class="n">channel_value</span><span class="p">(</span><span class="n">C_CH_WIDTH</span><span class="o">-</span><span class="mi">1</span><span class="w"> </span><span class="k">downto</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
 <span class="w">        </span><span class="n">v_sb_element</span><span class="p">.</span><span class="n">data_array</span><span class="w">    </span><span class="o">:=</span><span class="w"> </span><span class="n">avalon_st_transaction_info</span><span class="p">.</span><span class="n">data_array</span><span class="p">(</span><span class="mi">0</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="n">C_ARRAY_LENGTH</span><span class="o">-</span><span class="mi">1</span><span class="p">)(</span><span class="n">C_WORD_WIDTH</span><span class="o">-</span><span class="mi">1</span><span class="w"> </span><span class="k">downto</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
-<span class="w">        </span><span class="n">AVALON_ST_VVC_SB</span><span class="p">.</span><span class="n">check_received</span><span class="p">(</span><span class="n">C_AVALON_ST_VVC_1</span><span class="p">,</span><span class="w"> </span><span class="n">v_sb_element</span><span class="p">);</span>
+<span class="w">        </span><span class="n">avalon_st_vvc_sb</span><span class="p">.</span><span class="n">check_received</span><span class="p">(</span><span class="n">C_AVALON_ST_VVC_1</span><span class="p">,</span><span class="w"> </span><span class="n">v_sb_element</span><span class="p">);</span>
 <span class="w">      </span><span class="k">end</span><span class="w"> </span><span class="k">if</span><span class="p">;</span>
 <span class="w">    </span><span class="k">end</span><span class="w"> </span><span class="k">if</span><span class="p">;</span>
 
@@ -2714,6 +2715,7 @@ records. This is optional.</p>
 <li><p>Signal <code class="docutils literal notranslate"><span class="pre">last_cmd_idx_executed</span></code>. Stores the last command index executed by this VVC, necessary for the await_completion mechanism.</p></li>
 <li><p>Signal <code class="docutils literal notranslate"><span class="pre">terminate_current_cmd</span></code>. Command termination record (fields: set, reset, is_active). Where set and reset signal fields
 are used to toggle is_active. Used as inter process flags.</p></li>
+<li><p>Signal <code class="docutils literal notranslate"><span class="pre">entry_num_in_vvc_activity_register</span></code>. ID of the VVC after registering in the VVC activity register.</p></li>
 <li><p>Shared variable <code class="docutils literal notranslate"><span class="pre">command_queue</span></code>. Queue of commands to be executed in sequence towards the DUT.</p></li>
 <li><p>Shared variable <code class="docutils literal notranslate"><span class="pre">result_queue</span></code>. Queue of data received from the DUT which can be retrieved via the fetch_result command.</p></li>
 <li><p>The aliases are defined to allow common and simplified names.</p></li>
@@ -2746,6 +2748,7 @@ next command from the sequencer.</p>
 <div class="line-block">
 <div class="line">Step 0</div>
 <div class="line">- <code class="docutils literal notranslate"><span class="pre">initialize_interpreter()</span></code>. Initializes parameters to default passive/initial values (e.g. terminate_current_cmd.set := ‘0’).</div>
+<div class="line">- Initializes shared_vvc_last_received_cmd_idx.</div>
 <div class="line">- <code class="docutils literal notranslate"><span class="pre">priv_register_vvc()</span></code>. Registers the VVC in the VVC activity register. This mechanism is used to detect whether a VVC is
 active executing a command or inactive waiting for a new command, and is used by the await_completion mechanism.</div>
 </div>
@@ -2757,6 +2760,7 @@ active executing a command or inactive waiting for a new command, and is used by
 <div class="line">- Log at start using ID_CMD_INTERPRETER_WAIT and at the end using ID_CMD_INTERPRETER.</div>
 <div class="line">- Will only accept exact matches of instance index and name, and either the correct address or “ALL_CHANNELS”.</div>
 </div>
+<div class="line">- Updates shared_vvc_last_received_cmd_idx.</div>
 </div>
 <div class="line-block">
 <div class="line">Step 2a (only if command type is QUEUED)</div>
@@ -2787,7 +2791,8 @@ command queue.</p>
 <div class="line">Step 0</div>
 <div class="line">- <code class="docutils literal notranslate"><span class="pre">initialize_executor()</span></code>. Initializes parameters to default passive/initial values (e.g. terminate_current_cmd.reset := ‘0’).</div>
 <div class="line">- Initializes the internal VVC scoreboard by setting up the scope, configuration and enabling it <strong>(only if the Scoreboard
-feature was selected).</strong></div>
+feature was selected).</strong>
+- Sets the randomization seeds (if applicable).</div>
 </div>
 <div class="line-block">
 <div class="line">Step 1</div>
@@ -2803,31 +2808,36 @@ feature was selected).</strong></div>
 <div class="line">- Sets relevant flag parameters.</div>
 <div class="line">- Log command using ID_CMD_EXECUTOR (or log using ID_CMD_EXECUTOR_WAIT if queue is empty).</div>
 </div>
-<div class="line">- Insert inter-BFM delay if requested.</div>
+<div class="line">- Checks if the command is a BFM access</div>
+<div class="line">- <code class="docutils literal notranslate"><span class="pre">insert_inter_bfm_delay_if_requested()</span></code></div>
 <div class="line-block">
-<div class="line">- <code class="docutils literal notranslate"><span class="pre">insert_inter_bfm_delay_if_requested()</span></code> inserts either start-to-start or finish-to-start delay between BFM accesses if
-this is set in the <em>inter_bfm_delay</em> parameter in ‘vvc_config’. Logs information using ID_CMD_EXECUTOR.</div>
+<div class="line">- Inserts either start-to-start or finish-to-start delay between BFM accesses if this is set in the <em>inter_bfm_delay</em> parameter</div>
+<div class="line-block">
+<div class="line">in ‘vvc_config’. Logs information using ID_CMD_EXECUTOR.</div>
+</div>
+</div>
 <div class="line">- If the command currently being processed by the executor is a BFM access, a timestamp will be stored in
 <em>v_timestamp_start_of_current_bfm_access</em>.</div>
-</div>
 </div>
 <div class="line-block">
 <div class="line">Step 2</div>
 <div class="line">- Executes a command depending on the requested command/operation.</div>
 <div class="line-block">
+<div class="line">- The VVC Transaction Info is set before and after the command is executed with IN_PROGRESS and COMPLETED status.</div>
 <div class="line">- <em>terminate_current_cmd</em> is only checked inside operations that require multiple BFM accesses - like for instance a POLL_UNTIL
 command.</div>
 <div class="line">- <code class="docutils literal notranslate"><span class="pre">store_result()</span></code> is executed for any BFM, where it makes sense for you to store the result of a BFM access. In our example
 for SBI we think it only makes sense for ‘READ’.</div>
 <div class="line">- Logging as defined by your BFM.</div>
 </div>
-<div class="line">- Update the BFM access timestamps if this was a BFM access.</div>
+<div class="line">- Updates the BFM access timestamps if this was a BFM access.</div>
 <div class="line-block">
-<div class="line">- <em>v_timestamp_of_last_bfm_access</em> is set to ‘now’.</div>
+<div class="line">- <em>v_timestamp_end_of_last_bfm_access</em> is set to ‘now’.</div>
 <div class="line">- <em>v_timestamp_start_of_last_bfm_access</em> is set to <em>v_timestamp_start_of_current_bfm_access</em>.</div>
 </div>
 <div class="line">- The <em>terminate_current_cmd</em> flag is reset if it has been active.</div>
-<div class="line">- Update the <em>last_cmd_idx_executed</em> variable with the current command index (<em>v_cmd.cmd_idx</em>).</div>
+<div class="line">- Updates the <em>last_cmd_idx_executed</em> variable with the current command index (<em>v_cmd.cmd_idx</em>).</div>
+<div class="line">- Resets the VVC Transaction Info back to default values</div>
 </div>
 </section>
 <section id="command-terminator">
@@ -3042,7 +3052,7 @@ record can contain anything that is relevant for the outside, and it is recommen
 <div><ul class="simple">
 <li><p>current_cmd_idx: The current command index being processed in the executor.</p></li>
 <li><p>previous_cmd_idx: The previous command index being processed in the executor.</p></li>
-<li><p>pending_cmd_idx: The number of pending commands to be processed by the executor.</p></li>
+<li><p>pending_cmd_cnt: The number of pending commands to be processed by the executor.</p></li>
 </ul>
 </div></blockquote>
 <p>A constant C_VVC_STATUS_DEFAULT is defined for this type to use as default value.</p>
@@ -3053,7 +3063,7 @@ record can contain anything that is relevant for the outside, and it is recommen
 value.</p>
 <p>A shared variable array <code class="docutils literal notranslate"><span class="pre">shared_&lt;name&gt;_vvc_status</span></code> of type <strong>t_vvc_status</strong> is declared and all elements are set to the default
 value.</p>
-<p>The internal VVC Scoreboard <code class="docutils literal notranslate"><span class="pre">&lt;NAME&gt;_VVC_SB</span></code> is declared here as a shared variable. <strong>(only if the Scoreboard feature was selected).</strong></p>
+<p>The internal VVC Scoreboard <code class="docutils literal notranslate"><span class="pre">&lt;name&gt;_vvc_sb</span></code> is declared here as a shared variable. <strong>(only if the Scoreboard feature was selected).</strong></p>
 </section>
 <section id="vvc-dedicated-methods">
 <h4>VVC Dedicated Methods<a class="headerlink" href="#vvc-dedicated-methods" title="Link to this heading"></a></h4>
@@ -3074,6 +3084,7 @@ which VVC instance to forward the call to. This is done with the first two (or t
 <li><p>First, the shared_vvc_cmd record is set to its default value, resetting the data from any potential previous command.</p></li>
 <li><p>The general VVC fields (e.g. name and instance index) are set using the UVVM method set_general_target_and_command_fields().</p></li>
 <li><p>The VVC specific fields are set in the shared variable <code class="docutils literal notranslate"><span class="pre">shared_vvc_cmd</span></code>. This means e.g. address and data fields.</p></li>
+<li><p>The parent_msg_id_panel is used as the current msg_id_panel if the procedure was called from a hierarchical VVC.</p></li>
 <li><p>The command is sent to all VVCs using the UVVM method send_command_to_vvc(VVCT).</p></li>
 </ol>
 </div></blockquote>
@@ -3216,7 +3227,7 @@ sequencer to VVC.</p>
 and interpreter, and the interpreter procedures called interpreter_*, e.g. interpreter_fetch_result(). For more information
 about the interpreter_* procedures, please see <a class="reference internal" href="#vvc-framework-methods"><span class="std std-ref">Common VVC Methods</span></a>. For more information about the other methods in this
 package, see <a class="reference internal" href="#vvc-framework-name-vvc"><span class="std std-ref">&lt;name&gt;_vvc.vhd</span></a>. In addition to the procedures, the td_vvc_entity_support_pkg.vhd also contains types
-for VVC labels and executor results. The result array is also defined and its shared variable is instantiated in this package.</p>
+for VVC labels.</p>
 </section>
 </section>
 <section id="vvc-generator-script">
@@ -3269,13 +3280,13 @@ individually. You must update the t_channel type in UVVM-Util adaptations_pkg if
 <div><ul class="simple">
 <li><p>If VVC has 1 concurrent channel: whether the <strong>VVC shall have multiple executors</strong>. If you type ‘n’ and Enter, the script
 will not need any further information. If you type ‘y’ and Enter, it will ask to type a number between 2 and 3 for the
-<strong>number of concurrent executors</strong> including the cmd_executor. Then, the script will ask to <strong>name each executor</strong>, one at
+<strong>number of concurrent executors</strong> including the p_cmd_executor. Then, the script will ask to <strong>name each executor</strong>, one at
 a time. The executor names follow the same naming restrictions as the VVC name, stated in step 1.</p></li>
 <li><p>If VVC has several concurrent channels: <strong>how many channels shall have multiple executors</strong>. If you want a single executor
 in each channel press Enter to select the default ‘0’, the script will not need any further information. Otherwise, type the
 number of channels which shall have multiple executors and press Enter. The script will then ask for each channel, whether
 it <strong>shall contain multiple executors</strong> for which you can answer ‘y’ or ‘n’. If you answer ‘y’ for a given channel, you will
-be then asked to type a number between 2 and 3 for the <strong>number of concurrent executors</strong> including the cmd_executor. Then,
+be then asked to type a number between 2 and 3 for the <strong>number of concurrent executors</strong> including the p_cmd_executor. Then,
 the script will ask to <strong>name each executor</strong>, one at a time. The executor names follow the same naming restrictions as the
 VVC name, stated in step 1.</p></li>
 </ul>
